@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html ng-app="app5" ng-cloak>
+<head>
+<title>AngularJS Tutorial</title>
+<script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.5.8/angular.min.js"></script>
+<script src="js/exam5.js"></script>
+<style>
+.bluetext{
+  color:blue;
+}
+.boldtext{
+  font-weight: bold;
+}
+.stripedblue{
+  color:#007fff;
+  background-color: #dbe9f4;
+}
+.stripedbeige{
+  color:#cc0000;
+  background-color: #f5f5dc;
+}
+</style>
+</head>
+<body>
+  <div ng-controller="eventCtrl">
+   <p>
+   <button ng-disabled="disablebutton">Button</button>
+   </p>
+   <p>
+   <input type="checkbox" ng-model="disablebutton">Disable Button
+   </p>
+   <p>
+     <input type="checkbox" ng-model="dayTimeButton">Morning
+   </p>
+    <p ng-hide="!dayTimeButton">Good Morning</p>
+    <p ng-hide="dayTimeButton">Good Evening</p>
+
+    <p>
+      <select ng-model="textStyling">
+        <option value="bluetext">Blue Text</option>
+        <option value="boldtext">Bold Text</option>
+      </select>
+    </p>
+    <p ng-class="textStyling">Some Random Text</p>
+
+   <table>
+     <tr ng-repeat="item in capitals"
+     ng-class-even="'stripedblue'"
+     ng-class-odd="'stripedbeige'">
+       <td>{{item.city}}</td>
+       <td>{{item.state}}</td></tr>
+   </table>
+
+
+  </div>
+</body>
+</html>
