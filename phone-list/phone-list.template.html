@@ -1,17 +1,17 @@
 <div class="container-fluid">
   <div class="row">
-    <div class="col-md-12">
+    <div class="col-xs-12">
       <!--Sidebar content-->
       <center>
-      <h2 > Chicago crime Data</h2><br>
-      <p>
+      <h1 > Chicago Crime Data</h1>  <br>
+    <p>
         Sort by:  <select ng-model="$ctrl.orderProp">
           <option value="year">Year</option>
           <option value="above_500">Above $500</option>
           <option value="under_500">Under $500</option>
         </select>
         <input placeholder="Enter value" ng-model="$ctrl.query" />
-        <button ng-click="filter()">Filter</button><br><br>
+        <button ng-click="$ctrl.filter($ctrl.orderProp,$ctrl.query)">Filter</button><br><br>
       </p>
     </center>
 
@@ -29,48 +29,90 @@
       </ul>----->
       <center>
       <table id="text">
-        <tr><th  id="text">YEAR </th>
-          <th  id="text"> UNDER $500 </th>
-          <th id="text">ABOVE $500</th>
+        <tr><th  id="text"><a href="#"  ng-click="orderByField='year';ascsort = !ascsort">YEAR
+                       <span ng-show="orderByField == 'year' && ! ascsort" class="fa fa-caret-down"></span>
+                       <span ng-show=" orderByField== 'year' && ascsort" class="fa fa-caret-up"></span></a></th>
+           <th  id="text"> <a href="#"  ng-click="orderByField='year';ascsort = !ascsort">UNDER $500
+                      <span ng-show="orderByField == 'year' && ! ascsort" class="fa fa-caret-down"></span>
+                      <span ng-show=" orderByField== 'year' && ascsort" class="fa fa-caret-up"></span></a>  </th>
+
+          <th id="text"><a href="#"  ng-click="orderByField='year';ascsort = !ascsort">ABOVE $500
+                  <span ng-show="orderByField == 'year' && ! ascsort" class="fa fa-caret-down"></span>
+                   <span ng-show=" orderByField== 'year' && ascsort" class="fa fa-caret-up"></span></a></th>
          <th>Remove</th></tr>
-          <tr  ng-repeat="phone in $ctrl.phones | startfrom:(($ctrl.currentPage)*($ctrl.pageSize))| limitTo:$ctrl.pageCount">
+          <tr  ng-repeat="phone in $ctrl.phones | startfrom:(($ctrl.currentPage)*($ctrl.pageSize))| limitTo:$ctrl.pageSize|orderBy:orderByField:ascsort">
              <td>{{phone.year}}</td>
              <td>{{phone.above_500}}</td>
              <td>{{phone.under_500}}</td>
              <td>
-				    <button type="button" ng-click="removeItem(phone)" class="btn btn-sm btn-danger">
-					<i class="glyphicon glyphicon-remove-circle">
+				    <button type="button" ng-click="$ctrl.removeItem(phone)" class="btn btn-sm btn-danger">
+					 <i class="glyphicon glyphicon-remove-circle">
 					</i>
 				</button>
 				</td>
            </tr>
 
-      </table><br>
+      </table>
       <div style="margin-left:auto;margin-right:auto;width:500px;padding-top:30px;">
   <button ng-disabled="$ctrl.currentPage == 0" ng-click="$ctrl.currentPage=$ctrl.currentPage-1">
          Prev
    </button>
   <button ng-repeat="i in [1,2,3,4,5,6,7,8]  | limitTo:$ctrl.pageCount" ng-click="$ctrl.currentPage=i-1">{{i}}</button>
-  <button ng-disabled="$ctrl.currentPage>=$ctrl.phones/$ctrl.pageSize-1" ng-click="$ctrl.currentPage=$ctrl.currentPage+1">
+  <button ng-disabled="$ctrl.currentPage>=$ctrl.pageCount-1" ng-click="$ctrl.currentPage=$ctrl.currentPage+1">
         Next
   </button>
-</div>
+</div><br><br>
     </center>
-    </div>
-  <!---------  <center><div>
+  </div>
+   <center><div>
     <h3 id="text">Add More Record</h3>
-    <form> <div>
-        <label id="color" for="year">&nbsp&nbspEnter Year :</label>
-        <input id="textbox" placeholder="Year of Theft">
+    <form name="myForm"> <div ng-class="{'has-error': myForm.myDecimal.$invalid}">
+        <label id="color" for="year">Enter Year :</label>
+        <input  type="number"
+                            ng-pattern="/^[0-9]{1,4}$/"
+                            name="year"
+                            ng-model="$ctrl.year"
+                            min="1947"
+                            max="2016"
+                             />
+                             <span class="error-message"
+                              ng-if="myForm.year.$error.min">
+                            <br>Enter Valid Year between (1947-2016)
+                            </span>
+                             <span class="error-message"
+                                ng-if="myForm.year.$error.max">
+                                 <br>Enter Valid Year between (1947-2016)
+                                      </span>
       </div><br>
       <div>
         <label  id="color" for="above_500">Above $500 :</label>
-        <input  id="textbox1" placeholder="value of above $500">
+        <input  name="above_500"
+                              type="number"
+                                ng-pattern="/^[0-9]{1,6}$/"
+                              ng-model="$ctrl.above_500"
+
+                          />
+                             <span class="error-message"
+                                       ng-show="myForm.above_500.$error.pattern ">
+                                         <br>Enter a value between (0-100000)
+                                      </span>
+
       </div><br>
       <div>
         <label id="color" for="under_500">Under $500 :</label>
-        <input   id="textbox2" placeholder="value of under $500">
+        <input    name="under_500"
+                              type="number"
+                                ng-pattern="/^[0-9]{1,6}$/"
+                              ng-model="$ctrl.under_500"
+                              ng-required="true"
+                              />
+                              <span class="error-message"
+                                        ng-show="myForm.under_500.$error.pattern ">
+                                          <br>Enter a value between (0-100000)
+                                       </span>
+
       </div><br>
-      <input type="button" value="ADD" onclick="addRecord()"/></form></div></center>-------->
+      <input type="button" value="Add Record" ng-disabled="myForm.$invalid" ng-click="$ctrl.addItem()"/>
+    <input type="reset" value="Reset" /></form></div></center>
   </div>
 </div>
